@@ -36,6 +36,16 @@
       }
     ],
 
+    // 型情報のみの import を import type に強制するルール
+    // デフォルトでは import { type ... } の書式になっているので、
+    // import type { ... } の書式に変更
+    "@typescript-eslint/consistent-type-imports": [
+      "error",
+      {
+        "fixStyle": "separate-type-imports"
+      }
+    ],
+
     // オブジェクトの型定義にインターフェースまたは型エイリアスのどちらかを強制するルール
     // eslint-config-standard-with-typescript がインターフェースを強制しているのを無効化
     "@typescript-eslint/consistent-type-definitions": "off",
