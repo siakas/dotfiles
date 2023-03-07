@@ -103,10 +103,15 @@
     ],
 
     // Boolean 値が期待される記述で、Boolean 型以外の使用を許可しないルール
-    // ここではオブジェクト、関数、null、undefined の場合には許容するよう設定
+    // デフォルト設定だと警告が過剰に思えるので、ルールを緩和
+    // ここでは string, number, オブジェクト、関数、null、undefined の場合には許容するよう設定
     "@typescript-eslint/strict-boolean-expressions": [
       "error",
       {
+        "allowString": true,
+        "allowNumber": true,
+        "allowNullableString": true,
+        "allowNullableNumber": true,
         "allowNullableObject": true
       }
     ],
