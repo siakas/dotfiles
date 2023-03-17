@@ -158,18 +158,20 @@
       "error",
       {
         "groups": [
-          ["builtin", "external"],
           "type",
-          ["parent", "internal"],
-          "sibling",
+          "builtin",
+          "external",
+          "internal",
+          ["parent", "sibling"],
+          "object",
           "index"
         ],
         "pathGroups": [
-          // react 関連のモジュールを外部モジュールより前に配置する
+          // type のインポートを最上部に配置、ただし @types/* からのインポートは外部インポートのあとに配置
           {
-            "pattern": "{react,react-dom/**,react-router-dom,next,next/**}",
-            "group": "builtin",
-            "position": "before"
+            "pattern": "@/types",
+            "group": "type",
+            "position": "after"
           },
           // @/ からインポートするファイルをグルーピング
           {
