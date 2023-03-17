@@ -167,9 +167,9 @@
           "index"
         ],
         "pathGroups": [
-          // type のインポートを最上部に配置、ただし @types/* からのインポートは外部インポートのあとに配置
+          // type のインポートを最上部に配置、ただし @types/** からのインポートは外部インポートのあとに配置
           {
-            "pattern": "@/types",
+            "pattern": "@/types/**",
             "group": "type",
             "position": "after"
           },
