@@ -158,12 +158,10 @@
       "error",
       {
         "groups": [
-          "builtin",
-          "external",
-          "internal",
+          ["builtin", "external"],
           "type",
-          ["parent", "sibling"],
-          "object",
+          ["parent", "internal"],
+          "sibling",
           "index"
         ],
         "pathGroups": [
