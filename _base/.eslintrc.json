@@ -41,6 +41,16 @@
       }
     ],
 
+    // 配列のブラケットの両端にスペースを入れるルール
+    "array-bracket-spacing": [
+      "error",
+      "always",
+      {
+        "objectsInArrays": false,
+        "arraysInArrays": false
+      }
+    ],
+
     // 型情報のみの import を import type に強制するルール
     // デフォルトでは import { type ... } の書式になっているので、
     // import type { ... } の書式に変更
