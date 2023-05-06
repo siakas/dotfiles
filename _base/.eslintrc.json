@@ -42,14 +42,15 @@
     ],
 
     // 配列のブラケットの両端にスペースを入れるルール
-    "array-bracket-spacing": [
-      "error",
-      "always",
-      {
-        "objectsInArrays": false,
-        "arraysInArrays": false
-      }
-    ],
+    // 本設定と Prettier の挙動は衝突し、Prettier の方が強制的に優先されてしまうためコメントアウト
+    // "array-bracket-spacing": [
+    //   "error",
+    //   "always",
+    //   {
+    //     "objectsInArrays": false,
+    //     "arraysInArrays": false
+    //   }
+    // ],
 
     // 型情報のみの import を import type に強制するルール
     // デフォルトでは import { type ... } の書式になっているので、
