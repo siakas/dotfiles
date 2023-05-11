@@ -26,15 +26,31 @@
   ],
   "rules": {
     // 任意の構文の間に空行を入れるかどうかの定義
-    // ここでは return 文の前に常に空行を入れるよう設定
+    // ここでは return 文の前に空行を入れるが、一行の const 宣言の直後に限って空行なしを許容する設定としている
     "padding-line-between-statements": [
       "error",
       {
         "blankLine": "always",
         "prev": "*",
         "next": "return"
+      },
+      {
+        "blankLine": "any",
+        "prev": "singleline-const",
+        "next": "return"
       }
     ],
+
+    // 配列のブラケットの両端にスペースを入れるルール
+    // 本設定と Prettier の挙動は衝突し、Prettier の方が強制的に優先されてしまうためコメントアウト
+    // "array-bracket-spacing": [
+    //   "error",
+    //   "always",
+    //   {
+    //     "objectsInArrays": false,
+    //     "arraysInArrays": false
+    //   }
+    // ],
 
     // 型情報のみの import を import type に強制するルール
     // デフォルトでは import { type ... } の書式になっているので、
@@ -158,18 +174,20 @@
       "error",
       {
         "groups": [
-          ["builtin", "external"],
           "type",
-          ["parent", "internal"],
-          "sibling",
+          "builtin",
+          "external",
+          "internal",
+          ["parent", "sibling"],
+          "object",
           "index"
         ],
         "pathGroups": [
-          // react 関連のモジュールを外部モジュールより前に配置する
+          // type のインポートを最上部に配置、ただし @types/** からのインポートは外部インポートのあとに配置
           {
-            "pattern": "{react,react-dom/**,react-router-dom,next,next/**}",
-            "group": "builtin",
-            "position": "before"
+            "pattern": "@/types/**",
+            "group": "type",
+            "position": "after"
           },
           // @/ からインポートするファイルをグルーピング
           {
