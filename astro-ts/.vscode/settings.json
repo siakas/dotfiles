@@ -37,14 +37,16 @@
   "scss.validate": false,
   "less.validate": false,
 
-  // ファイル編集中に Stylelint のフォーマットを実行する拡張子を指定
+  // Stylelint の実行対象を定義
   "stylelint.validate": [
     "html",
     "css",
     "scss",
     "postcss",
-    "ts",
-    "tsx",
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
     "astro"
   ],
 
