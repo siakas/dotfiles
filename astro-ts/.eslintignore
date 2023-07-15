@@ -7,5 +7,6 @@ yarn.lock
 vite.config.ts
 next.config.js
 tsconfig.json
+src/env.d.ts
 *.cjs
 *.mjs

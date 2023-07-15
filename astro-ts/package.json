@@ -1,5 +1,5 @@
 {
-  "name": "faithful-field",
+  "name": "astro-mdx-sample",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
@@ -16,44 +16,30 @@
     "fix:prettier": "npm run lint:prettier -- --write"
   },
   "dependencies": {
-    "@astrojs/preact": "^2.2.1",
-    "@astrojs/tailwind": "^4.0.0",
-    "astro": "^2.6.5",
-    "preact": "^10.6.5",
-    "tailwindcss": "^3.3.2"
+    "@astrojs/mdx": "^0.19.7",
+    "@astrojs/react": "^2.2.1",
+    "@types/react": "^18.0.21",
+    "@types/react-dom": "^18.0.6",
+    "astro": "^2.8.1",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
   },
   "devDependencies": {
-    "@types/node": "^20.4.0",
-    "@typescript-eslint/eslint-plugin": "^5.61.0",
-    "@typescript-eslint/parser": "^5.61.0",
-    "autoprefixer": "^10.4.14",
+    "@typescript-eslint/parser": "^6.0.0",
     "eslint": "^8.44.0",
     "eslint-config-prettier": "^8.8.0",
-    "eslint-config-standard-with-typescript": "^36.0.0",
+    "eslint-config-react-app": "^7.0.1",
     "eslint-plugin-astro": "^0.27.2",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jsx-a11y": "^6.7.1",
-    "eslint-plugin-n": "^16.0.1",
-    "eslint-plugin-promise": "^6.1.1",
-    "eslint-plugin-react": "^7.32.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-unused-imports": "^2.0.0",
-    "goober": "^2.1.13",
+    "eslint-plugin-unused-imports": "^3.0.0",
     "npm-run-all": "^4.1.5",
     "postcss-html": "^1.5.0",
-    "postcss-styled-syntax": "^0.4.0",
     "prettier": "^2.8.8",
     "prettier-plugin-astro": "^0.10.0",
-    "prettier-plugin-tailwindcss": "^0.3.0",
     "sass": "^1.63.6",
     "stylelint": "^15.10.1",
-    "stylelint-config-recess-order": "^4.2.0",
-    "stylelint-config-standard-scss": "^10.0.0",
-    "typescript": "^5.1.6"
-  },
-  "browserslist": [
-    "last 2 versions",
-    "> 3% in JP",
-    "not dead"
-  ]
+    "stylelint-config-recess-order": "^4.3.0",
+    "stylelint-config-standard-scss": "^10.0.0"
+  }
 }

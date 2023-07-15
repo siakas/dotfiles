@@ -37,19 +37,6 @@
   "scss.validate": false,
   "less.validate": false,
 
-  // Stylelint の実行対象を定義
-  "stylelint.validate": [
-    "html",
-    "css",
-    "scss",
-    "postcss",
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact",
-    "astro"
-  ],
-
-  // Stylelint の実行パスを指定（Path 指定がないとローカル環境で Stylelint が動作しない場合がある）
-  "stylelint.stylelintPath": "node_modules/stylelint"
+  // Stylelint の実行対象を指定
+  "stylelint.validate": ["html", "css", "scss", "postcss", "astro"]
 }

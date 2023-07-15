@@ -4,23 +4,39 @@ module.exports = {
     es2022: true,
     node: true,
   },
-  extends: [
-    'plugin:@typescript-eslint/recommended',
-    'plugin:astro/recommended',
-    'standard-with-typescript',
-    'prettier',
-  ],
+  extends: ['plugin:astro/recommended', 'react-app', 'prettier'],
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
     project: './tsconfig.json',
   },
-  plugins: [
-    '@typescript-eslint',
-    'react',
-    'react-hooks',
-    'import',
-    'unused-imports',
+  plugins: ['import', 'unused-imports'],
+  overrides: [
+    {
+      files: ['*.astro'],
+      parser: 'astro-eslint-parser',
+      parserOptions: {
+        parser: '@typescript-eslint/parser',
+        extraFileExtensions: ['.astro'],
+      },
+    },
+    {
+      files: ['*.ts', '*.tsx'],
+      rules: {
+        // コンポーネントの props に型チェックをおこなうための propTypes プロパティの定義を強制するルール
+        // TypeScript の場合は不要なので、ファイル拡張子が `.tsx` の場合に無効化するよう設定を上書き
+        'react/prop-types': 'off',
+
+        // JSX における不明な属性値に対するルール
+        // ここでは Emotion で利用する `css` 属性を許容するよう設定
+        'react/no-unknown-property': [
+          'error',
+          {
+            ignore: ['css'],
+          },
+        ],
+      },
+    },
   ],
   rules: {
     // 任意の構文の間に空行を入れるかどうかの定義
@@ -95,18 +111,17 @@ module.exports = {
     ],
 
     // Boolean 値が期待される記述で、Boolean 型以外の使用を許可しないルール
-    // デフォルト設定だと警告が過剰に思えるので、ルールを緩和
-    // ここでは string, number, オブジェクト、関数、null、undefined の場合には許容するよう設定
-    '@typescript-eslint/strict-boolean-expressions': [
-      'error',
-      {
-        allowString: true,
-        allowNumber: true,
-        allowNullableString: true,
-        allowNullableNumber: true,
-        allowNullableObject: true,
-      },
-    ],
+    // リスクを理解したうえでルールを無効化
+    // 問題が多く見られるようならルールを再適用する
+    '@typescript-eslint/strict-boolean-expressions': 'off',
+    // '@typescript-eslint/strict-boolean-expressions': [
+    //   'error',
+    //   {
+    //     allowString: true,
+    //     allowNumber: true,
+    //     allowNullableObject: true,
+    //   },
+    // ],
 
     // トリプルスラッシュ・ディレクティブの使用を許可するかどうかを定義するルール
     // ここでは eslint-config-standard-with-typescript が一律禁止にしているのを、type 属性に限り許可するように設定
@@ -116,128 +131,113 @@ module.exports = {
         types: 'always',
       },
     ],
+
+    // autoFocus 属性の使用を禁止するルール
+    // autoFocus 属性の使用はユーザビリティを損なうため禁止は妥当なのだが、
+    // デフォルトで有効化されてるフレームワーク等に対して値を false にしたい場合でもエラーになってしまうので判定を無効化
+    'jsx-a11y/no-autofocus': 'off',
+
+    // インポートの際のファイル拡張子を記述するかを定義するルール
+    // ここでは npm パッケージ以外のファイルについて、`.js`、`.jsx`、`.ts`、`.tsx` のみ拡張子を省略し、
+    // それ以外のファイルは拡張子を記述させるように設定
+    // `.astro` は拡張子を明示するように指定
+    'import/extensions': [
+      'error',
+      {
+        ignorePackages: true,
+        pattern: {
+          js: 'never',
+          jsx: 'never',
+          ts: 'never',
+          tsx: 'never',
+          astro: 'always',
+        },
+      },
+    ],
+
+    // 最後のインポート文のあとは空行を入れるよう設定
+    'import/newline-after-import': 'error',
+
+    // モジュールインポートの順番をカスタマイズ
+    'import/order': [
+      'error',
+      {
+        groups: [
+          'builtin',
+          'external',
+          'internal',
+          ['parent', 'sibling'],
+          'object',
+          'type',
+          'index',
+        ],
+        pathGroups: [
+          // react, react-dom から読み込むファイルは最上段に配置
+          {
+            pattern: '{react,react-dom/**}',
+            group: 'builtin',
+            position: 'before',
+          },
+          // @/ からインポートするファイルをグルーピング
+          {
+            pattern: '{@/**}',
+            group: 'internal',
+            position: 'before',
+          },
+          // 非相対パスで記述した内部モジュールのコンポーネントを相対パスモジュールの直前に配置
+          {
+            pattern: '{[A-Z]*,**/[A-Z]*}',
+            group: 'internal',
+            position: 'after',
+          },
+          // @@/ からインポートするファイルを一番最後に配置
+          {
+            pattern: '@@/**',
+            group: 'index',
+            position: 'after',
+          },
+        ],
+        'newlines-between': 'never',
+        pathGroupsExcludedImportTypes: ['builtin'],
+        alphabetize: {
+          order: 'asc',
+          caseInsensitive: true,
+        },
+      },
+    ],
+
+    // displayName コンポーネントのプロパティで、デバッグメッセージでコンポーネントを明示するのに使用
+    // これがなくてもほとんどの場合はコンポーネントを特定できるため無効化
+    'react/display-name': 'off',
+
+    // React 17 以降で eslint-plugin-react を使用している場合のための設定
+    // 下記を無効化することで不要なエラーを回避
+    'react/jsx-uses-react': 'off',
+    'react/react-in-jsx-scope': 'off',
+
+    // Boolean 変数の受け渡しには JSX の省略形を使用する
+    // 追記：true を明示的に記述しないと正しく動作しないライブラリもあるので
+    // 'react/jsx-boolean-value': 'error',
+
+    // 文字列の属性値に波括弧は不要
+    'react/jsx-curly-brace-presence': 'error',
+
+    // 子要素のないコンポーネントは自己終了タグを使う
+    // HTML タグは除外している
+    'react/self-closing-comp': [
+      'error',
+      {
+        component: true,
+        html: false,
+      },
+    ],
+
+    // React Hook における依存関係を示す第二引数の内容を明示させるルール
+    // 第二引数に空配列を指定したい場合にも警告が出てしまうので無効化
+    'react-hooks/exhaustive-deps': 'off',
+
+    // Next.js における img 要素の使用を禁止するルール
+    // 一般的な静的サイト構築において img 要素の全面禁止は不便なので無効化
+    '@next/next/no-img-element': 'off',
   },
-  overrides: [
-    {
-      files: ['*.astro'],
-      parser: 'astro-eslint-parser',
-      parserOptions: {
-        parser: '@typescript-eslint/parser',
-        extraFileExtensions: ['.astro'],
-      },
-      rules: {
-        // override/add rules settings here, such as:
-        'astro/no-set-html-directive': 'error',
-      },
-    },
-    {
-      files: ['*.ts', '*.tsx'],
-      parser: '@typescript-eslint/parser',
-      extends: [
-        'plugin:react/recommended',
-        'plugin:react-hooks/recommended',
-        'prettier',
-      ],
-      rules: {
-        // インポートの際のファイル拡張子を記述するかを定義するルール
-        // ここでは npm パッケージ以外のファイルについて、`.js`、`.jsx`、`.ts`、`.tsx` のみ拡張子を省略し、
-        // それ以外のファイルは拡張子を記述させるように設定
-        'import/extensions': [
-          'error',
-          {
-            ignorePackages: true,
-            pattern: {
-              js: 'never',
-              jsx: 'never',
-              ts: 'never',
-              tsx: 'never',
-            },
-          },
-        ],
-
-        // 最後のインポート文のあとは空行を入れるよう設定
-        'import/newline-after-import': 'error',
-
-        // モジュールインポートの順番を定義
-        'import/order': [
-          'error',
-          {
-            groups: [
-              'builtin',
-              'external',
-              'internal',
-              'parent',
-              'sibling',
-              'object',
-              'index',
-            ],
-            pathGroups: [
-              {
-                pattern: '{react,react-dom/**}',
-                group: 'builtin',
-                position: 'before',
-              },
-              {
-                pattern: '{[A-Z]*,**/[A-Z]*}',
-                group: 'internal',
-                position: 'after',
-              },
-              {
-                pattern: './**.module.css',
-                group: 'index',
-                position: 'after',
-              },
-            ],
-            pathGroupsExcludedImportTypes: ['builtin'],
-            alphabetize: {
-              order: 'asc',
-            },
-          },
-        ],
-
-        // displayName コンポーネントのプロパティで、デバッグメッセージでコンポーネントを明示するのに使用
-        // これがなくてもほとんどの場合はコンポーネントを特定できるため無効化
-        'react/display-name': 'off',
-
-        // React 17 以降で eslint-plugin-react を使用している場合のための設定
-        // 下記を無効化することで不要なエラーを回避
-        'react/jsx-uses-react': 'off',
-        'react/react-in-jsx-scope': 'off',
-
-        // Boolean 変数の受け渡しには JSX の省略形を使用する
-        // 追記：true を明示的に記述しないと正しく動作しないライブラリもあるので
-        // 'react/jsx-boolean-value': 'error',
-
-        // 文字列の属性値に波括弧は不要
-        'react/jsx-curly-brace-presence': 'error',
-
-        // 子要素のないコンポーネントは自己終了タグを使う
-        // HTML タグは除外している
-        'react/self-closing-comp': [
-          'error',
-          {
-            component: true,
-            html: false,
-          },
-        ],
-
-        // React Hook における依存関係を示す第二引数の内容を明示させるルール
-        // 第二引数に空配列を指定したい場合にも警告が出てしまうので無効化
-        'react-hooks/exhaustive-deps': 'off',
-
-        // コンポーネントの props に型チェックをおこなうための propTypes プロパティの定義を強制するルール
-        // TypeScript の場合は不要なので、ファイル拡張子が `.tsx` の場合に無効化するよう設定を上書き
-        'react/prop-types': 'off',
-
-        // JSX における不明な属性値に対するルール
-        // ここでは Emotion で利用する `css` 属性を許容するよう設定
-        'react/no-unknown-property': [
-          'error',
-          {
-            ignore: ['css'],
-          },
-        ],
-      },
-    },
-  ],
 }
