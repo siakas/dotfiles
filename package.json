@@ -1,0 +1,39 @@
+{
+  "name": "@siakas/dotfiles",
+  "version": "1.0.0",
+  "description": "プロジェクト共通設定ファイルのセットアップツール",
+  "type": "module",
+  "bin": {
+    "dotfiles": "bin/setup.js"
+  },
+  "files": [
+    "bin",
+    "configs",
+    "README.md"
+  ],
+  "scripts": {
+    "start": "node bin/setup.js"
+  },
+  "dependencies": {
+    "@inquirer/prompts": "^7.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "dotfiles",
+    "config",
+    "setup",
+    "vscode",
+    "prettier",
+    "eslint",
+    "biome",
+    "claude"
+  ],
+  "author": "siakas",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/siakas/dotfiles.git"
+  }
+}
